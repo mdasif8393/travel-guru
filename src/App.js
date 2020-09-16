@@ -12,6 +12,7 @@ import {
 } from "react-router-dom";
 import Booking from './components/Booking/Booking';
 import Login from './components/Login/Login';
+import Search from './components/Search/Search';
 
 function App() {
   return (
@@ -28,6 +29,10 @@ function App() {
 
         <Route path = '/login'>
           <Login></Login>
+        </Route>
+
+        <Route path = '/search'>
+          <Search></Search>
         </Route>
 
         <Route exact path = '/'>

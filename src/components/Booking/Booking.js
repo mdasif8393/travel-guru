@@ -5,7 +5,7 @@ import './Booking.css'
 const Booking = () => {
     const history = useHistory();
     const handleBooking = () => {
-        history.push('/login');
+        history.push('/search');
     }
     return (
         <Container className="container-background-image" style={{height:'900px', width:'1440px'}}>
