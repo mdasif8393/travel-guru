@@ -1,0 +1,30 @@
+.container-background-image{
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(https://i.ibb.co/thhJrTw/Rectangle-1.png);
+    background-repeat: no-repeat, repeat;
+    background-position:center;
+    background-size:cover;
+}
+.coxbazar-background-image{
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(https://i.ibb.co/thhJrTw/Rectangle-1.png);
+    background-repeat: no-repeat, repeat;
+    background-position:center;
+    background-size:cover;
+    border: 3px solid #FBBC04;
+    border-radius: 20px;
+}
+.sreemangal-background-image{
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(https://i.ibb.co/cXJxN6q/Sreemongol.png);
+    background-repeat: no-repeat, repeat;
+    background-position:center;
+    background-size:cover;
+    border: 3px solid #FBBC04;
+    border-radius: 20px;
+}
+.sundarbans-background-image{
+    background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url(https://i.ibb.co/TKk06Kq/sundorbon.png);
+    background-repeat: no-repeat, repeat;
+    background-position:center;
+    background-size:cover;
+    border: 3px solid #FBBC04;
+    border-radius: 20px;
+}
