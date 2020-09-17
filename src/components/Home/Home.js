@@ -5,7 +5,7 @@ import './Home.css'
 const Home = () => {
     const history = useHistory();
     const handleCoxBazarBooking = () => {
-        history.push('/booking');
+        history.push('/booking/coxbazar');
     }
     return (
         <Container className="container-background-image" style={{height:'900px', width:'1440px'}}>

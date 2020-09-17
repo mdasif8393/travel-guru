@@ -1,9 +1,16 @@
 import { Map } from 'google-maps-react';
-import React from 'react';
-import { Container, Nav, Navbar } from 'react-bootstrap';
-import GoogleMap from '../GoogleMap/GoogleMap';
-import './Search.css'
+import React, { useContext } from 'react';
+import { Button, Container, Nav, Navbar } from 'react-bootstrap';
+import { UserContext } from '../../App';
+import GoogleMapCox from '../GoogleMapCox/GoogleMapCox';
+import GoogleMap from '../GoogleMapCox/GoogleMapCox';
+import './SearchCox.css'
+
 const SearchHotel = () => {
+    const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+    const handleSignOut = () =>{
+        setLoggedInUser({});
+    }
     return (
         <Container style={{height:'900px', width:'1440px'}}> 
 
@@ -12,10 +19,12 @@ const SearchHotel = () => {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav" style={{paddingLeft:"50px"}}>
                 <Nav className="mr-auto" >
-                <Nav.Link style={{marginLeft:"200px", color:'black'}} href="#home">News</Nav.Link>
+                <Nav.Link style={{marginLeft:"150px", color:'black'}} href="#home">News</Nav.Link>
                 <Nav.Link style={{marginLeft:"45px", color:'black'}} href="#link">Destination</Nav.Link>
                 <Nav.Link style={{marginLeft:"45px", color:'black'}} href="#link">Blog</Nav.Link>
                 <Nav.Link style={{marginLeft:"45px", color:'black'}} href="#link">Contact</Nav.Link>
+                <Nav.Link style={{marginLeft:"45px", color:'black'}} href="#link">{loggedInUser.name}</Nav.Link>
+                <Button onClick={handleSignOut} style={{marginLeft:"45px" , color:'black'}} variant="danger">Sign Out</Button>{' '}
                 </Nav>
             </Navbar.Collapse>
             </Navbar>
@@ -66,7 +75,7 @@ const SearchHotel = () => {
 
                     <div style={{height: '630px', width:'450px'}} className='col-md-6'>
                         <div  className='-flex justify-content-between align-items-center'>
-                            <GoogleMap ></GoogleMap>
+                            <GoogleMapCox ></GoogleMapCox>
                         </div>
                     </div>
                 </div>

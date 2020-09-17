@@ -1,7 +1,59 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Container, Form, FormControl, Nav, Navbar } from 'react-bootstrap';
 import './Login.css'
+import * as firebase from "firebase/app";
+import "firebase/auth";
+import firebaseConfig from './firebase.config'
+import { UserContext } from '../../App';
+import { useHistory, useLocation } from 'react-router-dom';
+
 const Login = () => {
+    let history = useHistory();
+    let location = useLocation();
+
+  let { from } = location.state || { from: { pathname: "/" } };
+    const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+    if (firebase.apps.length === 0){
+        firebase.initializeApp(firebaseConfig);
+    }
+
+    //Google login
+    const handleGoogleSignIn = () => {
+        const googleProvider = new firebase.auth.GoogleAuthProvider();
+        firebase.auth().signInWithPopup(googleProvider)
+        .then (res  => {
+            let {displayName, email} = res.user;
+            const googleSignInUser = {name: displayName, email};
+            setLoggedInUser(googleSignInUser);
+            history.replace(from);
+          }).catch(function(error) {
+ 
+            console.log(error.message);
+            
+          });
+    }
+
+    //Facebook login
+    const handleFacebookSignIn = () => {
+        var fbProvider = new firebase.auth.FacebookAuthProvider();
+        firebase.auth().signInWithPopup(fbProvider)
+        .then(function(result) {
+           
+            var token = result.credential.accessToken;
+            var user = result.user;
+            setLoggedInUser(user);
+            history.replace(from);
+            console.log('fb user after sign in', user);
+          }).catch(function(error) {
+              console.log(error);
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            var email = error.email;
+            var credential = error.credential;
+          });
+    }
+
+
     return (
         <Container style={{height:'900px', width:'1440px'}}> 
 
@@ -22,7 +74,8 @@ const Login = () => {
             </Navbar.Collapse>
             </Navbar>
 
-            
+            <Button onClick={handleGoogleSignIn}>Google Sign In</Button> <br/>
+            <Button onClick={handleFacebookSignIn}>Facebook Sign In</Button> <br/>
         </Container>
     );
 };

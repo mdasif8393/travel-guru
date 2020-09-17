@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createContext, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Button, Form, FormControl, Nav, Navbar } from 'react-bootstrap';
@@ -10,40 +10,47 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import Booking from './components/Booking/Booking';
+import BookingCox from './components/BookingCox/BookingCox';
 import Login from './components/Login/Login';
-import Search from './components/Search/Search';
+import SearchCox from './components/SearchCox/SearchCox';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+export const UserContext = createContext();
 
 function App() {
+  const [loggedInUser, setLoggedInUser] = useState({});
+
   return (
-    <Router>
-      <Switch>
+    <UserContext.Provider value={[loggedInUser, setLoggedInUser]}>
 
-        <Route path = '/home'>
-          <Home></Home>
-        </Route>
+      <Router>
+        <Switch>
 
-        <Route path = '/booking'>
-          <Booking></Booking>
-        </Route>
+          <Route path = '/home'>
+            <Home></Home>
+          </Route>
 
-        <Route path = '/login'>
-          <Login></Login>
-        </Route>
+          <Route path = '/booking/coxbazar'>
+            <BookingCox></BookingCox>
+          </Route>
 
-        <Route path = '/search'>
-          <Search></Search>
-        </Route>
+          <Route path = '/login'>
+            <Login></Login>
+          </Route>
+        
+          <PrivateRoute path = '/search/coxbazar'>
+            <SearchCox></SearchCox>
+          </PrivateRoute>
 
-        <Route exact path = '/'>
-          <Home></Home>
-        </Route>
+          <Route exact path = '/'>
+            <Home></Home>
+          </Route>
 
-        <Route path = '*'>
-          <NotFound />
-        </Route>
-      </Switch>
-    </Router>
+          <Route path = '*'>
+            <NotFound />
+          </Route>
+        </Switch>
+      </Router>
+    </UserContext.Provider>
     
   );
 }

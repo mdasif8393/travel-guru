@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button, Col, Container, Form, FormControl, Nav, Navbar, Row } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
-import './Booking.css'
+import './BookingCox.css'
 const Booking = () => {
     const history = useHistory();
     const handleBooking = () => {
-        history.push('/search');
+        history.push('/search/coxbazar');
     }
     return (
         <Container className="container-background-image" style={{height:'900px', width:'1440px'}}>
