@@ -21,7 +21,10 @@ function App() {
     isSignedIn : false,
     name: '',
     email: '',
-    photo: ''
+    password: '',
+    photo: '',
+    error: '',
+    success: false,
   });
 
   return (

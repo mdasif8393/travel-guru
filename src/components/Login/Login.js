@@ -1,13 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { Button, Container, Form, FormControl, Nav, Navbar } from 'react-bootstrap';
 import './Login.css'
 import * as firebase from "firebase/app";
 import "firebase/auth";
 import firebaseConfig from './firebase.config'
 import { UserContext } from '../../App';
-import { useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 
 const Login = () => {
+    const [newUser,setNewUser] = useState(false);
+
     let history = useHistory();
     let location = useLocation();
     let { from } = location.state || { from: { pathname: "/" } };
@@ -57,22 +59,7 @@ const Login = () => {
         .catch(err =>{
             console.log(err)
         });
-        // .then(function(result) {
-           
-        //     var token = result.credential.accessToken;
-        //     var user = result.user;
-        //     setLoggedInUser(user);
-        //     history.replace(from);
-        //     console.log('fb user after sign in', user);
-        //   }).catch(function(error) {
-        //       console.log(error);
-        //     var errorCode = error.code;
-        //     var errorMessage = error.message;
-        //     var email = error.email;
-        //     var credential = error.credential;
-        //   });
     }
-
 
     //Sign Out 
     const handleSignOut = () =>{
@@ -87,8 +74,78 @@ const Login = () => {
             setLoggedInUser(signedOutUser);
         })
         .catch(error =>{
-
         })
+    }
+
+    //sign in with email and password
+    const handleBlur = (e) => {
+        let isFieldValid = true;
+        if(e.target.name === 'email'){
+            isFieldValid = /\S+@\S+\.\S+/.test(e.target.value);
+        }
+        if(e.target.name === 'password'){
+            const isPasswordValid = e.target.value.length > 6;
+            const passwordHasNumber =  /\d{1}/.test(e.target.value);
+            isFieldValid = isPasswordValid && passwordHasNumber;
+        }
+        if(isFieldValid){
+            const newUserInfo = {...loggedInUser};
+            newUserInfo[e.target.name] = e.target.value;
+            setLoggedInUser(newUserInfo);
+        }
+    }
+    const handleSubmit = (e) => {
+        if(newUser && loggedInUser.email && loggedInUser.password){
+            firebase.auth().createUserWithEmailAndPassword(loggedInUser.email, loggedInUser.password)
+            .then(res => {
+                const newUserInfo = {...loggedInUser};
+                newUserInfo.error = '';
+                newUserInfo.success = true;
+                setLoggedInUser(newUserInfo);
+                updateUserName(loggedInUser.name);
+            })
+            .catch(error => {
+                // Handle Errors here.
+                const newUserInfo = {...loggedInUser};
+                newUserInfo.error = error.message;
+                newUserInfo.success = false;
+                setLoggedInUser(newUserInfo);
+              });
+        }
+
+        if(!newUser && loggedInUser.email && loggedInUser.password){
+            firebase.auth().signInWithEmailAndPassword(loggedInUser.email, loggedInUser.password)
+            .then(res => {
+                const newUserInfo = {...loggedInUser};
+                newUserInfo.error = '';
+                newUserInfo.success = true;
+                setLoggedInUser(newUserInfo);
+                history.replace(from);
+                console.log('sign in user info', res.user);
+            })
+            .catch(function(error) {
+                // Handle Errors here.
+                const newUserInfo = {...loggedInUser};
+                newUserInfo.error = error.message;
+                newUserInfo.success = false;
+                setLoggedInUser(newUserInfo);
+              });
+        }
+        e.preventDefault();
+    }
+
+    const updateUserName = (name) => {
+        const user = firebase.auth().currentUser;
+
+            user.updateProfile({
+            displayName: name,
+            })
+            .then(function() {
+            console.log("User name updated successfully");
+            })
+            .catch(function(error) {
+            console.log(error);
+            });
     }
 
 
@@ -117,6 +174,36 @@ const Login = () => {
             <Button onClick={handleSignOut}>Sign Out</Button> <br/>
 
 
+        
+        
+        <div className = 'container' style={{height:'591px', width:'570px', border:'1px solid lightgrey', textAlign:'center'}}> 
+            <h1>Sign In / Sign UP form</h1>
+            <form onSubmit = {handleSubmit}>
+                {
+                    newUser && <input style={{height:'40px', width:'461px'}} className ='form-group' type="text" onBlur={handleBlur} name="name" placeholder="Name" />
+                }
+                <br/>
+                <input style={{height:'40px', width:'461px'}} className ='form-group' type="text" onBlur={handleBlur} name="email" placeholder = "Email" required/> <br/>
+                <input style={{height:'40px', width:'461px'}} className ='form-group' type="password" onBlur={handleBlur} name="password" placeholder = "Password" required/> <br/>
+                <input style={{height:'40px', width:'461px', backgroundColor:'#F9A51A', border:'none'}} className ='form-group' type="submit" value="Submit"/>
+                
+            </form>
+            <p>Don't have an account?<Link style={{color: '#F9A51A'}} onClick={()=>setNewUser(!newUser)}>Create an account</Link></p>
+            <hr/>
+            <p onClick={handleFacebookSignIn} style={{border:'1px solid lightgrey', width:'350px', height:'51px', borderRadius:'15px', padding:'5px', marginLeft:'80px'}}><img style ={{hight:'37px', width:'37px'}} src="https://i.ibb.co/LhZWFmd/fb.png" alt=""/>
+            Continue with Facebook
+            </p>
+            <p onClick={handleGoogleSignIn} style={{border:'1px solid lightgrey', width:'350px', height:'51px', borderRadius:'15px', padding:'5px', marginLeft:'80px'}}><img style ={{hight:'37px', width:'37px'}} src="https://i.ibb.co/VTBHT1n/google.png" alt=""/>
+            Continue with Google
+            </p>
+        
+        </div>
+
+
+        <p style={{color:'red',}}>{loggedInUser.error}</p>
+        {
+            loggedInUser.success && <p style={{color:'green'}}>User {newUser ? 'created' : 'Logged in'} successfully</p>
+        }
         </Container>
     );
 };
