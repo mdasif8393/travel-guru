@@ -20,6 +20,7 @@ const Login = () => {
         firebase.initializeApp(firebaseConfig);
     }
 
+
     //Google login
     const handleGoogleSignIn = () => {
         const googleProvider = new firebase.auth.GoogleAuthProvider();
@@ -61,21 +62,6 @@ const Login = () => {
         });
     }
 
-    //Sign Out 
-    const handleSignOut = () =>{
-        firebase.auth().signOut()
-        .then(res =>{
-            const signedOutUser = {
-                isSignedIn : false,
-                name : '',
-                photo : '',
-                email : ''
-            }
-            setLoggedInUser(signedOutUser);
-        })
-        .catch(error =>{
-        })
-    }
 
     //sign in with email and password
     const handleBlur = (e) => {
@@ -168,14 +154,7 @@ const Login = () => {
                 
             </Navbar.Collapse>
             </Navbar>
-
-            <Button onClick={handleGoogleSignIn}>Google Sign In </Button>  <br/>
-            <Button onClick={handleFacebookSignIn}>Facebook Sign In</Button> <br/>
-            <Button onClick={handleSignOut}>Sign Out</Button> <br/>
-
-
-        
-        
+      
         <div className = 'container' style={{height:'591px', width:'570px', border:'1px solid lightgrey', textAlign:'center'}}> 
             <h1>Sign In / Sign UP form</h1>
             <form onSubmit = {handleSubmit}>
@@ -196,14 +175,11 @@ const Login = () => {
             <p onClick={handleGoogleSignIn} style={{border:'1px solid lightgrey', width:'350px', height:'51px', borderRadius:'15px', padding:'5px', marginLeft:'80px'}}><img style ={{hight:'37px', width:'37px'}} src="https://i.ibb.co/VTBHT1n/google.png" alt=""/>
             Continue with Google
             </p>
-        
-        </div>
-
-
-        <p style={{color:'red',}}>{loggedInUser.error}</p>
+            <p style={{color:'red',}}>{loggedInUser.error}</p>
         {
             loggedInUser.success && <p style={{color:'green'}}>User {newUser ? 'created' : 'Logged in'} successfully</p>
         }
+        </div>
         </Container>
     );
 };

@@ -5,7 +5,7 @@ import './Home.css'
 const Home = () => {
     const history = useHistory();
     const handleCoxBazarBooking = () => {
-        history.push('/booking/coxbazar');
+    history.push('/booking/coxbazar');
     }
     return (
         <Container className="container-background-image" style={{height:'900px', width:'1440px'}}>
@@ -22,7 +22,8 @@ const Home = () => {
                 <Nav.Link style={{marginLeft:"45px", color:'white'}} href="#link">Destination</Nav.Link>
                 <Nav.Link style={{marginLeft:"45px" , color:'white'}} href="#link">Blog</Nav.Link>
                 <Nav.Link style={{marginLeft:"45px" , color:'white'}} href="#link">Contact</Nav.Link>
-                <Button style={{marginLeft:"45px" }} variant="warning">Login</Button>{' '}
+                <Button Link to="/login" style={{marginLeft:"45px", color:'black'}} variant="warning">Login</Button>{' '}
+
                 </Nav>
                 
             </Navbar.Collapse>
@@ -35,7 +36,7 @@ const Home = () => {
                         <div className='-flex justify-content-between align-items-center'>
                             <h1 style={{color: 'white'}}>COX'S BAZAR</h1>
                             <p style={{color: 'white'}}>Cox's Bazar is a city, fishing port tourism center and district headquarters in southeastern Bangladesh. It is famous mostly for it's long natural sandy beach and in it...</p>
-                            <Button onClick={handleCoxBazarBooking} style={{marginLeft:"45px" }} variant="warning">Booking</Button>{' '}
+                            <Button onClick={handleCoxBazarBooking} style={{marginLeft:"45px" }} variant="warning">Booking --></Button>{' '}
                         </div>
                     </div>
 
@@ -47,7 +48,7 @@ const Home = () => {
                         </div>
                     </div>
 
-                    <div className='col-md-3'>
+                    <div className='col-md-3' onClick={handleCoxBazarBooking}>
                         <div className='-flex justify-content-between align-items-center'>
                         <div style={{height:'416px', width:'245px'}} className='sreemangal-background-image'>
                                 <h3 style={{color: 'white', paddingTop:'350px', paddingLeft:'10px'}}>SREEMANGAL</h3>
@@ -55,7 +56,7 @@ const Home = () => {
                         </div>
                     </div>
 
-                    <div className='col-md-3'>
+                    <div className='col-md-3 places' onClick={handleCoxBazarBooking}>
                         <div className='-flex justify-content-between align-items-center'>
                         <div style={{height:'416px', width:'245px'}} className='sundarbans-background-image'>
                                 <h3 style={{color: 'white', paddingTop:'350px', paddingLeft:'10px'}}>SUNDARBANS</h3>
@@ -65,8 +66,7 @@ const Home = () => {
 
                 </div>
             </div>
-            <button style={{borderRadius:'50%' , borderStyle:'none', marginLeft:'45%', marginTop:'50px', marginRight:'20px'}}>o</button>
-            <button style={{borderRadius:'50%' , borderStyle:'none'}}>o</button>
+            
         </Container>
     );
 };
