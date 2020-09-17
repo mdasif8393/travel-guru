@@ -10,9 +10,10 @@ import { useHistory, useLocation } from 'react-router-dom';
 const Login = () => {
     let history = useHistory();
     let location = useLocation();
+    let { from } = location.state || { from: { pathname: "/" } };
 
-  let { from } = location.state || { from: { pathname: "/" } };
     const [loggedInUser, setLoggedInUser] = useContext(UserContext);
+
     if (firebase.apps.length === 0){
         firebase.initializeApp(firebaseConfig);
     }
@@ -22,35 +23,72 @@ const Login = () => {
         const googleProvider = new firebase.auth.GoogleAuthProvider();
         firebase.auth().signInWithPopup(googleProvider)
         .then (res  => {
-            let {displayName, email} = res.user;
-            const googleSignInUser = {name: displayName, email};
+            const {displayName, photoURL, email} = res.user;
+            const googleSignInUser = {
+                isSignedIn : true,
+                name : displayName,
+                email: email,
+                photo: photoURL
+            };
             setLoggedInUser(googleSignInUser);
             history.replace(from);
-          }).catch(function(error) {
- 
-            console.log(error.message);
-            
-          });
+          })
+          .catch(err =>{
+            console.log(err)
+        });
     }
 
     //Facebook login
     const handleFacebookSignIn = () => {
         var fbProvider = new firebase.auth.FacebookAuthProvider();
         firebase.auth().signInWithPopup(fbProvider)
-        .then(function(result) {
-           
-            var token = result.credential.accessToken;
-            var user = result.user;
-            setLoggedInUser(user);
+        .then(res => {
+            const {displayName, photoURL, email} = res.user;
+            const facebookSignInUser = {
+                isSignedIn : true,
+                name : displayName,
+                email: email,
+                photo: photoURL
+            };
+            console.log(facebookSignInUser);
+            setLoggedInUser(facebookSignInUser);
             history.replace(from);
-            console.log('fb user after sign in', user);
-          }).catch(function(error) {
-              console.log(error);
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            var email = error.email;
-            var credential = error.credential;
-          });
+        })
+        .catch(err =>{
+            console.log(err)
+        });
+        // .then(function(result) {
+           
+        //     var token = result.credential.accessToken;
+        //     var user = result.user;
+        //     setLoggedInUser(user);
+        //     history.replace(from);
+        //     console.log('fb user after sign in', user);
+        //   }).catch(function(error) {
+        //       console.log(error);
+        //     var errorCode = error.code;
+        //     var errorMessage = error.message;
+        //     var email = error.email;
+        //     var credential = error.credential;
+        //   });
+    }
+
+
+    //Sign Out 
+    const handleSignOut = () =>{
+        firebase.auth().signOut()
+        .then(res =>{
+            const signedOutUser = {
+                isSignedIn : false,
+                name : '',
+                photo : '',
+                email : ''
+            }
+            setLoggedInUser(signedOutUser);
+        })
+        .catch(error =>{
+
+        })
     }
 
 
@@ -74,8 +112,11 @@ const Login = () => {
             </Navbar.Collapse>
             </Navbar>
 
-            <Button onClick={handleGoogleSignIn}>Google Sign In</Button> <br/>
+            <Button onClick={handleGoogleSignIn}>Google Sign In </Button>  <br/>
             <Button onClick={handleFacebookSignIn}>Facebook Sign In</Button> <br/>
+            <Button onClick={handleSignOut}>Sign Out</Button> <br/>
+
+
         </Container>
     );
 };
